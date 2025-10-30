@@ -47,6 +47,12 @@ class PengeluaranController extends Controller
                 ->with('errors', $this->validator->getErrors());
         }
 
+        if ($this->pengeluaranModel->where('nomor_bon', $this->request->getPost('nomor_bon'))->countAllResults() > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nomor Bon sudah pernah digunakan. Harap gunakan kode unik!');
+        }
+
         $data = [
             'nomor_bon' => $this->request->getPost('nomor_bon'),
             'tujuan_wip' => $this->request->getPost('tujuan_wip'),

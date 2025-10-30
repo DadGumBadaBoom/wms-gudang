@@ -38,17 +38,17 @@ CREATE TABLE IF NOT EXISTS `barang` (
 
 -- Insert Master Data Barang
 INSERT INTO `barang` (`kode_barang`, `nama_barang`, `stok_akhir`) VALUES
-('AA001', 'Karton Laptop Asus 14 Inch', 0),
-('AA002', 'Karton Laptop Asus 15 Inch', 0),
-('AA003', 'Karton Laptop Asus 16 Inch', 0),
-('AA004', 'Plastik Internal All Asus Series', 0),
-('AA005', 'Karton Laptop MSI Katana Series', 0),
-('AA006', 'Karton Laptop Bravo Series', 0),
-('AA007', 'Karton Laptop Intelegance Series', 0),
-('AA008', 'Karton Laptop Titan New', 0),
-('AA009', 'Plastik Internal Black MSI Series', 0),
-('AA010', 'Plastik Internal Transparant MSI All', 0),
-('AA011', 'Plackband Karton Brown', 0);
+('AA001', 'Karton Laptop Asus 14 Inch', 100),
+('AA002', 'Karton Laptop Asus 15 Inch', 100),
+('AA003', 'Karton Laptop Asus 16 Inch', 100),
+('AA004', 'Plastik Internal All Asus Series', 100),
+('AA005', 'Karton Laptop MSI Katana Series', 100),
+('AA006', 'Karton Laptop Bravo Series', 100),
+('AA007', 'Karton Laptop Intelegance Series', 100),
+('AA008', 'Karton Laptop Titan New', 50),
+('AA009', 'Plastik Internal Black MSI Series', 50),
+('AA010', 'Plastik Internal Transparant MSI All', 50),
+('AA011', 'Plackband Karton Brown', 50);
 
 -- ===========================================
 -- TABLE: penerimaan

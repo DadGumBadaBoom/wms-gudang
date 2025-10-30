@@ -47,6 +47,12 @@ class PenerimaanController extends Controller
                 ->with('errors', $this->validator->getErrors());
         }
 
+        if ($this->penerimaanModel->where('kode_penerimaan', $this->request->getPost('kode_penerimaan'))->countAllResults() > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Kode Penerimaan sudah pernah digunakan. Harap gunakan kode unik!');
+        }
+
         $data = [
             'supplier' => $this->request->getPost('supplier'),
             'tanggal' => $this->request->getPost('tanggal'),
