@@ -94,10 +94,10 @@
                                 <?php foreach ($pengeluaran as $p): ?>
                                     <tr>
                                         <td><?= date('d/m/Y', strtotime($p['tanggal_bon'])) ?></td>
-                                        <td><?= $p['nomor_bon'] ?></td>
-                                        <td><?= $p['tujuan_wip'] ?></td>
-                                        <td><?= $p['nama_barang'] ?></td>
-                                        <td class="text-center"><strong><?= $p['jumlah_keluar'] ?></strong></td>
+                                        <td><?= esc($p['nomor_bon']) ?></td>
+                                        <td><?= esc($p['tujuan_wip']) ?></td>
+                                        <td><?= esc($p['nama_barang']) ?></td>
+                                        <td class="text-center"><strong><?= esc($p['jumlah_keluar']) ?></strong></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -124,8 +124,8 @@
                         <select class="form-select" name="kode_barang" id="kode_barang_modal" required>
                             <option value="">Pilih Kode Barang</option>
                             <?php foreach ($barang as $b): ?>
-                                <option value="<?= $b['kode_barang'] ?>" data-nama="<?= $b['nama_barang'] ?>" data-stok="<?= $b['stok_akhir'] ?>">
-                                    <?= $b['kode_barang'] ?> - <?= $b['nama_barang'] ?>
+                                <option value="<?= esc($b['kode_barang'], 'attr') ?>" data-nama="<?= esc($b['nama_barang'], 'attr') ?>" data-stok="<?= esc($b['stok_akhir'], 'attr') ?>">
+                                    <?= esc($b['kode_barang']) ?> - <?= esc($b['nama_barang']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -212,11 +212,16 @@
             tbody.html('<tr><td colspan="4" class="text-center text-muted">Belum ada barang dipilih</td></tr>');
         } else {
             listBarangKeluar.forEach((item, index) => {
+                // Escape untuk XSS protection
+                const kodeBarang = $('<div>').text(item.kode_barang).html();
+                const namaBarang = $('<div>').text(item.nama_barang).html();
+                const jumlah = $('<div>').text(item.jumlah).html();
+                
                 tbody.append(`
                 <tr>
-                    <td>${item.kode_barang}</td>
-                    <td>${item.nama_barang}</td>
-                    <td class="text-center"><strong>${item.jumlah}</strong></td>
+                    <td>${kodeBarang}</td>
+                    <td>${namaBarang}</td>
+                    <td class="text-center"><strong>${jumlah}</strong></td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-danger" onclick="removeBarangKeluar(${index})">
                             <i class="fas fa-trash"></i>
@@ -265,6 +270,7 @@
                 url: '<?= base_url('pengeluaran/store') ?>',
                 type: 'POST',
                 data: {
+                    <?= csrf_token() ?>: '<?= csrf_hash() ?>',
                     nomor_bon: $('#nomor_bon').val(),
                     tujuan_wip: $('#tujuan_wip').val(),
                     tanggal_bon: $('#tanggal_bon').val(),

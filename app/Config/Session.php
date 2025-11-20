@@ -57,7 +57,19 @@ class Session extends BaseConfig
      *
      * IMPORTANT: You are REQUIRED to set a valid save path!
      */
-    public string $savePath = WRITEPATH . 'session';
+    public string $savePath = '';
+    
+    public function __construct()
+    {
+        parent::__construct();
+        
+        // Set savePath dengan path absolut
+        // Gunakan path absolut untuk menghindari masalah dengan WRITEPATH yang mungkin null
+        if (empty($this->savePath) || $this->savePath === 'null') {
+            $writablePath = defined('WRITEPATH') ? WRITEPATH : __DIR__ . '/../../writable/';
+            $this->savePath = rtrim($writablePath, '/\\') . DIRECTORY_SEPARATOR . 'session';
+        }
+    }
 
     /**
      * --------------------------------------------------------------------------
@@ -69,7 +81,7 @@ class Session extends BaseConfig
      * WARNING: If you're using the database driver, don't forget to update
      *          your session table's PRIMARY KEY when changing this setting.
      */
-    public bool $matchIP = false;
+    public bool $matchIP = false; // Set true jika menggunakan HTTPS untuk keamanan lebih
 
     /**
      * --------------------------------------------------------------------------

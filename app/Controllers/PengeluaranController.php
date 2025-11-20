@@ -6,6 +6,9 @@ use App\Models\PengeluaranModel;
 use App\Models\BarangModel;
 use CodeIgniter\Controller;
 
+/**
+ * Controller pengeluaran barang - kirim ke WIP dan update stok otomatis
+ */
 class PengeluaranController extends Controller
 {
     protected $pengeluaranModel;
@@ -17,9 +20,11 @@ class PengeluaranController extends Controller
         $this->barangModel = new BarangModel();
     }
 
+    /**
+     * @return mixed
+     */
     public function index()
     {
-        // Check session
         if (!session()->has('user_id')) {
             return redirect()->to('/auth');
         }
@@ -33,6 +38,9 @@ class PengeluaranController extends Controller
         return view('pengeluaran/index', $data);
     }
 
+    /**
+     * @return mixed
+     */
     public function store()
     {
         if (!$this->validate([
@@ -47,6 +55,7 @@ class PengeluaranController extends Controller
                 ->with('errors', $this->validator->getErrors());
         }
 
+        // Cek nomor bon unik
         if ($this->pengeluaranModel->where('nomor_bon', $this->request->getPost('nomor_bon'))->countAllResults() > 0) {
             return redirect()->back()
                 ->withInput()
@@ -69,10 +78,7 @@ class PengeluaranController extends Controller
                 ->with('error', 'Stok barang tidak mencukupi! Stok tersedia: ' . $barang['stok_akhir']);
         }
 
-        // Simpan data pengeluaran
         $this->pengeluaranModel->insert($data);
-
-        // Update stok barang
         $this->barangModel->updateStok($data['kode_barang'], $data['jumlah_keluar'], 'kurang');
 
         return redirect()->to('/pengeluaran')

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
+/**
+ * Model pengeluaran barang
+ */
 class PengeluaranModel extends Model
 {
     protected $table            = 'pengeluaran';
@@ -14,14 +17,12 @@ class PengeluaranModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['nomor_bon', 'tujuan_wip', 'tanggal_bon', 'kode_barang', 'jumlah_keluar'];
 
-    // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules = [
         'nomor_bon' => 'required|max_length[20]',
         'tujuan_wip' => 'required|max_length[50]',
@@ -33,7 +34,6 @@ class PengeluaranModel extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];
@@ -44,6 +44,9 @@ class PengeluaranModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * @return array
+     */
     public function getPengeluaranWithBarang()
     {
         return $this->select('pengeluaran.*, barang.nama_barang')

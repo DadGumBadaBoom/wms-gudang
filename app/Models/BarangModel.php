@@ -4,6 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
+/**
+ * Model barang - CRUD dan update stok
+ */
 class BarangModel extends Model
 {
     protected $table            = 'barang';
@@ -14,14 +17,12 @@ class BarangModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['kode_barang', 'nama_barang', 'stok_akhir'];
 
-    // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules = [
         'kode_barang' => 'required|max_length[10]',
         'nama_barang' => 'required|max_length[100]',
@@ -31,7 +32,6 @@ class BarangModel extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];
@@ -42,6 +42,12 @@ class BarangModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * @param string $kode_barang
+     * @param int $jumlah
+     * @param string $jenis 'tambah' atau 'kurang'
+     * @return bool
+     */
     public function updateStok($kode_barang, $jumlah, $jenis = 'tambah')
     {
         $barang = $this->where('kode_barang', $kode_barang)->first();
@@ -51,8 +57,6 @@ class BarangModel extends Model
                 $stok_baru = $barang['stok_akhir'] + $jumlah;
             } else {
                 $stok_baru = $barang['stok_akhir'] - $jumlah;
-
-                // Validasi stok tidak boleh negatif
                 if ($stok_baru < 0) {
                     return false;
                 }
@@ -65,6 +69,10 @@ class BarangModel extends Model
         return false;
     }
 
+    /**
+     * @param string $kode_barang
+     * @return array|null
+     */
     public function getBarangByKode($kode_barang)
     {
         return $this->where('kode_barang', $kode_barang)->first();

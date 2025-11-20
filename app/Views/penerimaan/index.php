@@ -17,6 +17,7 @@
                 <hr>
 
                 <form action="<?= base_url('penerimaan/store') ?>" method="post">
+                    <?= csrf_field() ?>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label"><i class="fas fa-truck"></i> Nama Supplier</label>
@@ -54,7 +55,7 @@
                             <select class="form-select" name="kode_barang" id="kode_barang" required>
                                 <option value="">Pilih Kode Barang</option>
                                 <?php foreach ($barang as $b): ?>
-                                    <option value="<?= $b['kode_barang'] ?>"><?= $b['kode_barang'] ?> - <?= $b['nama_barang'] ?></option>
+                                    <option value="<?= esc($b['kode_barang'], 'attr') ?>"><?= esc($b['kode_barang']) ?> - <?= esc($b['nama_barang']) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -101,10 +102,10 @@
                                 <?php foreach ($penerimaan as $p): ?>
                                     <tr>
                                         <td><?= date('d/m/Y', strtotime($p['tanggal'])) ?></td>
-                                        <td><?= $p['supplier'] ?></td>
-                                        <td><?= $p['kode_penerimaan'] ?></td>
-                                        <td><?= $p['nama_barang'] ?></td>
-                                        <td class="text-center"><strong><?= $p['jumlah'] ?></strong></td>
+                                        <td><?= esc($p['supplier']) ?></td>
+                                        <td><?= esc($p['kode_penerimaan']) ?></td>
+                                        <td><?= esc($p['nama_barang']) ?></td>
+                                        <td class="text-center"><strong><?= esc($p['jumlah']) ?></strong></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>

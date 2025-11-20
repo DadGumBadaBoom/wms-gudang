@@ -7,11 +7,16 @@ use App\Models\PenerimaanModel;
 use App\Models\PengeluaranModel;
 use CodeIgniter\Controller;
 
+/**
+ * Controller dashboard - menampilkan statistik aplikasi
+ */
 class Dashboard extends Controller
 {
+    /**
+     * @return mixed
+     */
     public function index()
     {
-        // Check session
         if (!session()->has('user_id')) {
             return redirect()->to('/auth');
         }

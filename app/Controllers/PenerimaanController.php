@@ -6,6 +6,9 @@ use App\Models\PenerimaanModel;
 use App\Models\BarangModel;
 use CodeIgniter\Controller;
 
+/**
+ * Controller penerimaan barang - input dari supplier dan update stok otomatis
+ */
 class PenerimaanController extends Controller
 {
     protected $penerimaanModel;
@@ -17,9 +20,11 @@ class PenerimaanController extends Controller
         $this->barangModel = new BarangModel();
     }
 
+    /**
+     * @return mixed
+     */
     public function index()
     {
-        // Check session
         if (!session()->has('user_id')) {
             return redirect()->to('/auth');
         }
@@ -33,6 +38,9 @@ class PenerimaanController extends Controller
         return view('penerimaan/index', $data);
     }
 
+    /**
+     * @return mixed
+     */
     public function store()
     {
         if (!$this->validate([
@@ -47,6 +55,7 @@ class PenerimaanController extends Controller
                 ->with('errors', $this->validator->getErrors());
         }
 
+        // Cek kode penerimaan unik
         if ($this->penerimaanModel->where('kode_penerimaan', $this->request->getPost('kode_penerimaan'))->countAllResults() > 0) {
             return redirect()->back()
                 ->withInput()
@@ -63,21 +72,18 @@ class PenerimaanController extends Controller
             'jumlah' => $this->request->getPost('jumlah'),
         ];
 
-        // Simpan data penerimaan
         $this->penerimaanModel->insert($data);
-
-        // Update stok barang
         $this->barangModel->updateStok($data['kode_barang'], $data['jumlah'], 'tambah');
 
         return redirect()->to('/penerimaan')
             ->with('success', 'Data penerimaan berhasil disimpan dan stok barang diperbarui.');
     }
 
+    /**
+     * @return mixed
+     */
     public function getByPo()
     {
-        $nomor_po = $this->request->getPost('nomor_po');
-        // Ini adalah contoh, sesuaikan dengan logika PO Anda
-        // Anda bisa membuat tabel PO terpisah jika diperlukan
         return $this->response->setJSON(['kode_barang' => '', 'nama_barang' => '', 'jumlah' => '']);
     }
 }

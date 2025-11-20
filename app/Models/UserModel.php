@@ -4,6 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
+/**
+ * Model user - autentikasi dan CRUD user
+ */
 class UserModel extends Model
 {
     protected $table            = 'users';
@@ -14,14 +17,12 @@ class UserModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['username', 'password'];
 
-    // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules = [
         'username' => 'required|max_length[50]',
         'password' => 'required|max_length[255]',
@@ -30,7 +31,6 @@ class UserModel extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];
@@ -41,6 +41,11 @@ class UserModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * @param string $username
+     * @param string $password
+     * @return array|false
+     */
     public function authenticate($username, $password)
     {
         $user = $this->where('username', $username)->first();

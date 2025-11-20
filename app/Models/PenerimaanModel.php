@@ -4,6 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
+/**
+ * Model penerimaan barang
+ */
 class PenerimaanModel extends Model
 {
     protected $table            = 'penerimaan';
@@ -14,14 +17,12 @@ class PenerimaanModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['supplier', 'tanggal', 'kode_penerimaan', 'nomor_sj', 'nomor_po', 'kode_barang', 'jumlah'];
 
-    // Dates
     protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules = [
         'supplier' => 'required|max_length[50]',
         'tanggal' => 'required',
@@ -35,7 +36,6 @@ class PenerimaanModel extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];
@@ -46,6 +46,9 @@ class PenerimaanModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * @return array
+     */
     public function getPenerimaanWithBarang()
     {
         return $this->select('penerimaan.*, barang.nama_barang')

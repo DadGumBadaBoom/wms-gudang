@@ -1,100 +1,49 @@
 # 🏭 WMS Gudang - Warehouse Management System
 
-[![CodeIgniter Version](https://img.shields.io/badge/CodeIgniter-4.0+-red.svg)](https://codeigniter.com)
-[![PHP Version](https://img.shields.io/badge/PHP-8.1+-blue.svg)](https://php.net)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+Sistem Manajemen Gudang berbasis web untuk mengelola aset, penerimaan, dan pengeluaran barang di gudang.
 
-Sistem manajemen gudang berbasis web untuk mengelola stok barang masuk dan keluar secara real-time. Dibangun dengan **CodeIgniter 4** dan **MySQL**.
+## 📋 Deskripsi
 
----
+WMS Gudang adalah aplikasi web untuk manajemen gudang yang dibangun dengan **CodeIgniter 4**. Aplikasi ini menyediakan fitur lengkap untuk mengelola:
 
-## 📋 Daftar Isi
-
-- [Fitur Utama](#-fitur-utama)
-- [Teknologi](#-teknologi)
-- [Persyaratan Sistem](#-persyaratan-sistem)
-- [Instalasi](#-instalasi)
-- [Penggunaan](#-penggunaan)
-- [Struktur Project](#-struktur-project)
-- [Database](#-database)
-- [Troubleshooting](#-troubleshooting)
-- [Lisensi](#-lisensi)
-
----
+- 📦 **Master Barang** - Kelola data barang di gudang
+- 📥 **Penerimaan Barang** - Input barang masuk dari supplier
+- 📤 **Pengeluaran Barang** - Input barang keluar ke WIP (Work In Progress)
+- 📊 **Dashboard** - Statistik dan informasi gudang
+- 👥 **User Management** - Kelola user dengan sistem keamanan
 
 ## ✨ Fitur Utama
 
-### 🔐 Autentikasi
+- ✅ **Dashboard** - Statistik real-time (Total Barang, Penerimaan, Pengeluaran, Stok Minimal)
+- ✅ **Manajemen Aset Gudang** - Kelola master data barang
+- ✅ **Penerimaan Barang** - Input barang masuk dengan detail supplier, PO, SJ
+- ✅ **Barang Keluar** - Input barang keluar ke WIP dengan sistem bon produksi
+- ✅ **User Management** - CRUD user dengan sistem keamanan secret key
+- ✅ **Keamanan** - CSRF Protection, XSS Protection, Rate Limiting, Password Hashing
+- ✅ **UI Modern** - Desain responsif dengan Bootstrap 5 dan gradient yang menarik
 
-- Login dengan username dan password
-- Session management
-- Logout
-
-### 📊 Dashboard
-
-- Statistik total barang
-- Jumlah penerimaan dan pengeluaran
-- Monitoring barang dengan stok minimal
-- Visualisasi data real-time
-
-### 🏷️ Aset Gudang
-
-- Daftar master barang lengkap
-- Monitoring stok real-time
-- Indikator peringatan stok minimal (< 10)
-
-### 📦 Manajemen Penerimaan
-
-- Input barang masuk dari supplier
-- Update stok otomatis
-- Riwayat penerimaan barang
-- Tracking nomor SJ dan PO
-
-### 🚚 Manajemen Pengeluaran
-
-- Input barang keluar ke WIP
-- Validasi stok tidak boleh negatif
-- Modal pop-up untuk input barang
-- Riwayat pengeluaran barang
-
----
-
-## 🛠️ Teknologi
+## 🛠️ Teknologi yang Digunakan
 
 - **Framework:** CodeIgniter 4
-- **Database:** MySQL (XAMPP)
+- **PHP:** 8.0+
+- **Database:** MySQL
 - **Frontend:** Bootstrap 5, Font Awesome
-- **PHP Version:** 8.1+
 - **Server:** Apache (XAMPP)
-- **Security:** Password hashing dengan bcrypt
 
----
+## 📦 Persyaratan Sistem
 
-## 💻 Persyaratan Sistem
-
-- **PHP:** 8.1 atau lebih tinggi
-- **MySQL:** 5.7+ atau MariaDB 10.3+
-- **Apache:** 2.4+ (atau web server lain)
-- **Composer:** Untuk dependency management
-- **XAMPP:** (Opsional, untuk development lokal)
-
-### Ekstensi PHP yang Diperlukan:
-
-- `intl`
-- `mbstring`
-- `json`
-- `mysqlnd` (untuk MySQL)
-- `libcurl` (opsional)
-
----
+- PHP 8.0 atau lebih tinggi
+- MySQL 5.7+ atau MariaDB
+- Apache Web Server
+- Composer (untuk dependencies)
 
 ## 🚀 Instalasi
 
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/username/prototipe-v1.git
-cd prototipe-v1
+git clone https://github.com/username/wms-gudang.git
+cd wms-gudang
 ```
 
 ### 2. Install Dependencies
@@ -103,319 +52,178 @@ cd prototipe-v1
 composer install
 ```
 
-### 3. Setup Environment
+### 3. Setup Database
 
-Copy file `env` menjadi `.env`:
+1. Buat database di MySQL:
+   ```sql
+   CREATE DATABASE db_wms_gudang CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+   ```
 
-```bash
-cp env .env
-```
+2. Import database:
+   - Buka phpMyAdmin: `http://localhost/phpmyadmin`
+   - Import file `database_import.sql`
 
-Edit file `.env` dan sesuaikan konfigurasi:
+### 4. Konfigurasi Environment
+
+1. Copy file `env` menjadi `.env`
+2. Edit file `.env` dan sesuaikan konfigurasi:
 
 ```env
-CI_ENVIRONMENT = development
-
 app.baseURL = 'http://localhost/prototipe-v1/'
 
 database.default.hostname = localhost
 database.default.database = db_wms_gudang
 database.default.username = root
-database.default.password =
+database.default.password = 
 database.default.DBDriver = MySQLi
-database.default.DBPrefix =
-database.default.port = 3306
+
+user.admin.secret = "ubah_dengan_key_rahasia_anda"
 ```
 
-### 4. Setup Database
-
-#### Opsi A: Import via phpMyAdmin (Recommended)
-
-1. Buka **phpMyAdmin**: `http://localhost/phpmyadmin`
-2. Klik tab **"Import"**
-3. Pilih file `database_import.sql` dari folder project
-4. Klik **"Go"**
-
-#### Opsi B: Via Command Line
+### 5. Set Permission (Linux/Mac)
 
 ```bash
-cd C:\xampp\htdocs\prototipe-v1
-php spark migrate
-php spark db:seed BarangSeeder
-php spark db:seed UserSeeder
+chmod -R 777 writable/
 ```
 
-### 5. Set Permissions
+### 6. Jalankan Aplikasi
 
-Pastikan folder `writable` memiliki izin tulis:
+1. Start Apache dan MySQL di XAMPP
+2. Akses: `http://localhost/prototipe-v1/`
 
-```bash
-chmod -R 755 writable/
-```
+## 🔐 Login Default
 
-### 6. Start Server
+- **Username:** `admin123`
+- **Password:** `123456789`
 
-Jika menggunakan XAMPP:
+**⚠️ PENTING:** Ganti password default setelah login pertama kali!
 
-- Buka **XAMPP Control Panel**
-- Start **Apache** dan **MySQL**
+## 📖 Dokumentasi
 
-Untuk development server CodeIgniter:
+- **[PANDUAN_PERTAMA_KALI.md](PANDUAN_PERTAMA_KALI.md)** - Panduan lengkap setup pertama kali
+- **[CARA_TAMBAH_USER.md](CARA_TAMBAH_USER.md)** - Panduan user management
 
-```bash
-php spark serve
-```
+## 🔒 Keamanan
 
-### 7. Akses Aplikasi
+Aplikasi ini sudah dilengkapi dengan:
 
-Buka browser dan akses:
-
-```
-http://localhost/prototipe-v1/
-```
-
-**Login Default:**
-
-- Username: `admin123`
-- Password: `123456789`
-
----
-
-## 📖 Penggunaan
-
-### Login
-
-Akses aplikasi melalui browser dan login dengan kredensial default.
-
-### Dashboard
-
-Setelah login, Anda akan melihat:
-
-- Statistik total barang
-- Jumlah penerimaan dan pengeluaran
-- Barang dengan stok minimal
-- Menu navigasi sidebar
-
-### Aset Gudang
-
-- Lihat daftar semua master barang
-- Monitor stok real-time
-- Barang dengan stok < 10 akan ditandai dengan badge warning
-
-### Terima Barang
-
-1. Pilih menu **"Terima Barang"**
-2. Isi form:
-   - Supplier
-   - Tanggal
-   - Kode Penerimaan
-   - Nomor SJ dan PO (opsional)
-   - Kode Barang
-   - Jumlah
-3. Klik **"Simpan Penerimaan"**
-4. Stok otomatis bertambah
-
-### Barang Keluar
-
-1. Pilih menu **"Barang Keluar"**
-2. Isi form:
-   - Nomor Bon
-   - Tujuan WIP
-   - Tanggal Bon
-3. Klik **"Tambah Barang Keluar"**
-4. Pilih barang di modal pop-up
-5. Input jumlah
-6. Klik **"Kirim Barang ke WIP"**
-7. Stok otomatis berkurang (dengan validasi tidak boleh negatif)
-
----
+- ✅ **CSRF Protection** - Proteksi terhadap Cross-Site Request Forgery
+- ✅ **XSS Protection** - Output escaping untuk mencegah XSS attack
+- ✅ **SQL Injection Protection** - Menggunakan Query Builder (prepared statements)
+- ✅ **Rate Limiting** - Proteksi brute force (5 percobaan per 5 menit)
+- ✅ **Password Hashing** - Menggunakan bcrypt
+- ✅ **Session Security** - Validasi user setiap request
+- ✅ **Secret Key System** - Untuk akses admin panel
 
 ## 📁 Struktur Project
 
 ```
 prototipe-v1/
 ├── app/
-│   ├── Controllers/          # Controller aplikasi
-│   │   ├── Auth.php
-│   │   ├── Dashboard.php
-│   │   ├── BarangController.php
-│   │   ├── PenerimaanController.php
-│   │   └── PengeluaranController.php
-│   ├── Models/                # Model database
-│   │   ├── UserModel.php
-│   │   ├── BarangModel.php
-│   │   ├── PenerimaanModel.php
-│   │   └── PengeluaranModel.php
-│   ├── Views/                 # Template view
-│   │   ├── layout/           # Layout utama
-│   │   ├── auth/             # View autentikasi
-│   │   ├── dashboard/        # View dashboard
-│   │   ├── barang/           # View master barang
-│   │   ├── penerimaan/       # View penerimaan
-│   │   └── pengeluaran/      # View pengeluaran
-│   ├── Database/
-│   │   ├── Migrations/       # Database migrations
-│   │   └── Seeds/           # Database seeders
-│   └── Filters/             # Filter untuk autentikasi
-├── public/                   # Folder public (web root)
-├── vendor/                   # Composer dependencies
-├── writable/                 # Folder untuk log, cache, session
-├── .env                     # File konfigurasi environment
-├── database_import.sql      # File import database
-└── README.md                # Dokumentasi ini
+│   ├── Controllers/      # Controller aplikasi
+│   ├── Models/           # Model database
+│   ├── Views/            # Template view
+│   ├── Filters/          # Filter keamanan
+│   └── Config/           # Konfigurasi
+├── public/               # Web root
+├── writable/             # Folder writable (session, cache, logs)
+├── database_import.sql   # File import database
+├── .env                  # Konfigurasi environment
+└── README.md             # Dokumentasi ini
 ```
 
----
+## 🎯 Fitur Detail
 
-## 🗄️ Database
+### Dashboard
+- Statistik total barang
+- Total penerimaan
+- Total pengeluaran
+- Barang dengan stok minimal
+- Informasi sistem
 
-### Struktur Tabel
+### Aset Gudang
+- Lihat semua master barang
+- Cari barang berdasarkan kode
+- Lihat stok tersedia
 
-#### Tabel: `users`
+### Penerimaan Barang
+- Input barang masuk
+- Detail supplier, tanggal, kode penerimaan
+- Nomor PO dan SJ (opsional)
+- Update stok otomatis
 
-- `id_user` (PK, Auto Increment)
-- `username` (Unique)
-- `password` (Bcrypt Hash)
+### Barang Keluar
+- Input barang keluar ke WIP
+- Sistem bon produksi
+- Multiple barang dalam satu bon
+- Update stok otomatis
 
-#### Tabel: `barang`
+### User Management
+- Tambah user baru
+- Edit user (username & password)
+- Hapus user
+- Ganti password
+- **Akses dengan secret key** (tidak muncul di menu)
 
-- `id_barang` (PK, Auto Increment)
-- `kode_barang` (Unique Key)
-- `nama_barang`
-- `stok_akhir`
+## 🔧 Konfigurasi
 
-#### Tabel: `penerimaan`
+### Secret Key Admin
 
-- `id_penerimaan` (PK, Auto Increment)
-- `supplier`
-- `tanggal`
-- `kode_penerimaan`
-- `nomor_sj` (Optional)
-- `nomor_po` (Optional)
-- `kode_barang` (FK)
-- `jumlah`
-
-#### Tabel: `pengeluaran`
-
-- `id_pengeluaran` (PK, Auto Increment)
-- `nomor_bon`
-- `tujuan_wip`
-- `tanggal_bon`
-- `kode_barang` (FK)
-- `jumlah_keluar`
-
-### Data Master Barang
-
-Aplikasi dilengkapi dengan 11 master barang default:
-
-- AA001: Karton Laptop Asus 14 Inch
-- AA002: Karton Laptop Asus 15 Inch
-- AA003: Karton Laptop Asus 16 Inch
-- AA004: Plastik Internal All Asus Series
-- AA005: Karton Laptop MSI Katana Series
-- AA006: Karton Laptop Bravo Series
-- AA007: Karton Laptop Intelegance Series
-- AA008: Karton Laptop Titan New
-- AA009: Plastik Internal Black MSI Series
-- AA010: Plastik Internal Transparant MSI All
-- AA011: Plackband Karton Brown
-
----
-
-## 🔧 Troubleshooting
-
-### Error 404 Not Found
-
-**Penyebab:** Konfigurasi baseURL tidak sesuai.
-
-**Solusi:**
-
-1. Edit file `.env`
-2. Sesuaikan `app.baseURL` dengan URL project Anda
-3. Pastikan Apache/webserver sudah running
-
-### Error: Database tidak ditemukan
-
-**Penyebab:** Database belum dibuat atau nama database salah.
-
-**Solusi:**
-
-1. Import file `database_import.sql` di phpMyAdmin
-2. Atau buat database manual: `CREATE DATABASE db_wms_gudang;`
-3. Pastikan konfigurasi di `.env` sesuai
-
-### Error: Access denied for user 'root'@'localhost'
-
-**Penyebab:** Password MySQL tidak kosong.
-
-**Solusi:**
-Edit file `.env`:
+Secret key untuk akses user management dapat diubah di file `.env`:
 
 ```env
-database.default.password = passwordAnda
+user.admin.secret = "key_rahasia_anda"
 ```
 
-### Halaman Kosong / Blank
+**Default:** `admin123456`
 
-**Solusi:**
+**⚠️ PENTING:** Ganti secret key default untuk keamanan!
 
-1. Cek error log di `writable/logs/`
-2. Pastikan PHP version >= 8.1
-3. Pastikan file `.env` ada di folder project
-4. Pastikan ekstensi PHP yang diperlukan sudah terinstall
+### Base URL
 
-### Login Gagal
+Sesuaikan base URL di file `.env`:
 
-**Solusi:**
+```env
+app.baseURL = 'http://localhost/prototipe-v1/'
+```
 
-1. Pastikan user dengan password hash sudah ada di database
-2. Password default: `123456789`
-3. Jalankan seeder: `php spark db:seed UserSeeder`
+## 🐛 Troubleshooting
 
-### Stok Tidak Update
+### Error 404 Not Found
+- Pastikan Apache sudah running
+- Cek konfigurasi `app.baseURL` di `.env`
+- Pastikan folder ada di `htdocs`
 
-**Solusi:**
+### Error Database
+- Pastikan MySQL sudah running
+- Cek konfigurasi database di `.env`
+- Pastikan database sudah dibuat dan di-import
 
-1. Cek relasi `kode_barang` di tabel penerimaan/pengeluaran
-2. Pastikan kode barang sudah ada di master barang
-3. Cek error log untuk detail error
+### Error Session
+- Pastikan folder `writable/session` bisa ditulis
+- Cek permission folder `writable/`
 
----
+Lihat **[PANDUAN_PERTAMA_KALI.md](PANDUAN_PERTAMA_KALI.md)** untuk troubleshooting lengkap.
 
-## 📄 Dokumentasi Tambahan
+## 📝 Lisensi
 
-- [`CARA_JALANKAN.md`](CARA_JALANKAN.md) - Panduan lengkap menjalankan aplikasi
-- [`SETUP_DATABASE.md`](SETUP_DATABASE.md) - Panduan setup database detail
-- [`SETUP_INSTRUKSI.md`](SETUP_INSTRUKSI.md) - Instruksi setup lengkap
-- [`TEST_DATABASE.md`](TEST_DATABASE.md) - Panduan verifikasi database
-- [`README_WMS.md`](README_WMS.md) - Dokumentasi sistem lengkap
-
----
-
-## 🤝 Kontribusi
-
-Kontribusi sangat diterima! Untuk perubahan besar:
-
-1. Fork repository
-2. Buat feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
-5. Buat Pull Request
-
----
-
-## 📝 License
-
-Project ini menggunakan lisensi **MIT License**. Lihat file [LICENSE](LICENSE) untuk detail lebih lanjut.
-
----
+Lihat file [LICENSE](LICENSE) untuk detail lisensi.
 
 ## 👤 Author
 
-Dibuat dengan ❤️ untuk manajemen gudang yang lebih baik.
+Dibuat untuk kebutuhan manajemen gudang.
+
+## 🙏 Acknowledgments
+
+- CodeIgniter 4 Framework
+- Bootstrap 5
+- Font Awesome
+
+## 📞 Support
+
+Jika ada pertanyaan atau masalah, silakan buat issue di repository ini.
 
 ---
 
-**Selamat menggunakan WMS Gudang! 🎉**
+**⭐ Jika project ini membantu, jangan lupa berikan star! ⭐**
 
-Jika ada pertanyaan atau masalah, silakan buat [Issue](../../issues) di repository ini.

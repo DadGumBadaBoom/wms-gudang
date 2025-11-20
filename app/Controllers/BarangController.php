@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Models\BarangModel;
 use CodeIgniter\Controller;
 
+/**
+ * Controller barang - CRUD dan pencarian barang
+ */
 class BarangController extends Controller
 {
     protected $barangModel;
@@ -14,9 +17,11 @@ class BarangController extends Controller
         $this->barangModel = new BarangModel();
     }
 
+    /**
+     * @return mixed
+     */
     public function index()
     {
-        // Check session
         if (!session()->has('user_id')) {
             return redirect()->to('/auth');
         }
@@ -29,6 +34,9 @@ class BarangController extends Controller
         return view('barang/index', $data);
     }
 
+    /**
+     * @return mixed
+     */
     public function getByKode()
     {
         $kode_barang = $this->request->getPost('kode_barang');

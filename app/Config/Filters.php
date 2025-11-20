@@ -13,6 +13,7 @@ use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\AuthFilter;
+use App\Filters\RateLimitFilter;
 
 class Filters extends BaseFilters
 {
@@ -25,17 +26,24 @@ class Filters extends BaseFilters
      * [filter_name => classname]
      * or [filter_name => [classname1, classname2, ...]]
      */
+    /**
+     * Daftar alias untuk filter classes
+     * Memudahkan penggunaan filter dengan nama yang lebih sederhana
+     * 
+     * @var array<string, class-string|list<class-string>>
+     */
     public array $aliases = [
-        'csrf'          => CSRF::class,
-        'toolbar'       => DebugToolbar::class,
-        'honeypot'      => Honeypot::class,
-        'invalidchars'  => InvalidChars::class,
-        'secureheaders' => SecureHeaders::class,
-        'cors'          => Cors::class,
-        'forcehttps'    => ForceHTTPS::class,
-        'pagecache'     => PageCache::class,
-        'performance'   => PerformanceMetrics::class,
-        'auth'          => AuthFilter::class,
+        'csrf'          => CSRF::class, // Cross-Site Request Forgery protection
+        'toolbar'       => DebugToolbar::class, // Debug toolbar untuk development
+        'honeypot'      => Honeypot::class, // Honeypot untuk mencegah spam
+        'invalidchars'  => InvalidChars::class, // Filter karakter tidak valid
+        'secureheaders' => SecureHeaders::class, // Security headers
+        'cors'          => Cors::class, // Cross-Origin Resource Sharing
+        'forcehttps'    => ForceHTTPS::class, // Force HTTPS
+        'pagecache'     => PageCache::class, // Page caching
+        'performance'   => PerformanceMetrics::class, // Performance metrics
+        'auth'          => AuthFilter::class, // Custom: Filter autentikasi user
+        'ratelimit'     => RateLimitFilter::class, // Custom: Filter rate limiting
     ];
 
     /**
@@ -72,15 +80,27 @@ class Filters extends BaseFilters
      *     after: array<string, array{except: list<string>|string}>|list<string>
      * }
      */
+    /**
+     * Filter yang diterapkan secara global pada semua request
+     * Filter 'before' dijalankan sebelum request diproses
+     * Filter 'after' dijalankan setelah request diproses
+     * 
+     * @var array{
+     *     before: array<string, array{except: list<string>|string}>|list<string>,
+     *     after: array<string, array{except: list<string>|string}>|list<string>
+     * }
+     */
     public array $globals = [
         'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            // 'honeypot', // Honeypot filter (disabled)
+            // PENTING: CSRF protection aktif untuk semua route kecuali auth/login
+            // Login di-exclude karena akan dihandle manual di controller
+            'csrf' => ['except' => ['auth/login']],
+            'invalidchars', // Filter karakter tidak valid
         ],
         'after' => [
-            // 'honeypot',
-            // 'secureheaders',
+            // 'honeypot', // Honeypot filter (disabled)
+            'secureheaders', // Tambahkan security headers ke response
         ],
     ];
 

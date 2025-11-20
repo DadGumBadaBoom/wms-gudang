@@ -44,15 +44,21 @@ abstract class BaseController extends Controller
     // protected $session;
 
     /**
+     * Inisialisasi controller sebelum method dijalankan
+     * Method ini dipanggil otomatis oleh framework sebelum setiap request
+     * 
+     * @param RequestInterface $request Request object
+     * @param ResponseInterface $response Response object
+     * @param LoggerInterface $logger Logger object
      * @return void
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        // Do Not Edit This Line
+        // Do Not Edit This Line - PENTING: Jangan hapus baris ini
         parent::initController($request, $response, $logger);
 
         // Preload any models, libraries, etc, here.
-
+        // Contoh: Load model atau service yang sering digunakan
         // E.g.: $this->session = service('session');
     }
 }
